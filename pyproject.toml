@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentbreak"
+version = "0.4.5"
+description = "Chaos proxy for testing LLM agent resilience — inject faults like latency, errors, and bad responses. Supports OpenAI, Anthropic, and MCP."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["llm", "openai", "anthropic", "mcp", "proxy", "chaos-testing", "resilience", "agents", "fault-injection", "testing", "ai-agents"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Internet :: Proxy Servers",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "fastapi>=0.115.0",
+  "httpx>=0.27.0",
+  "pydantic>=2.7.0",
+  "pyyaml>=6.0.0",
+  "typer>=0.12.0",
+  "uvicorn>=0.30.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/mnvsk97/agentbreak"
+Repository = "https://github.com/mnvsk97/agentbreak"
+Issues = "https://github.com/mnvsk97/agentbreak/issues"
+Documentation = "https://mnvsk97.github.io/agentbreak"
+
+[project.scripts]
+agentbreak = "agentbreak.main:cli"
+
+[project.optional-dependencies]
+plugin = [
+  "mcp>=1.0.0",
+]
+dev = [
+  "pytest>=8.0.0",
+  "pytest-xdist>=3.6.0",
+  "httpx>=0.27.0",
+  "mcp>=1.0.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["agentbreak*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: integration tests that start real servers"]
