@@ -148,6 +148,17 @@ done
 wait
 ```
 
+**If `queries.yaml` has a `tool_probes` section**, send each probe as a direct MCP curl. These test tool call validation — run them AFTER the normal queries:
+
+For each probe in `tool_probes`:
+```bash
+curl -s -w "\n" http://localhost:5005/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":<N>,"method":"tools/call","params":{"name":"<tool>","arguments":<arguments>}}'
+```
+
+Send probes sequentially (not in parallel) so the validation log is easy to read.
+
 Check traffic landed:
 ```bash
 curl -s http://localhost:5005/_agentbreak/scorecard | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'Requests: {d[\"requests_seen\"]}, Faults: {d[\"injected_faults\"]}')"
@@ -300,7 +311,33 @@ agentbreak history compare <old_id> <new_id>
 >
 > ---
 >
-> ### 3. Issues Found
+> ### 3. Tool Coverage & Validation
+>
+> *Only include this section if MCP is enabled and registry has tools. Get data from `mcp-scorecard` → `tool_coverage` and `tool_validation`.*
+>
+> **Coverage:**
+>
+> | Tool | Calls | Faults | Status |
+> |------|------:|-------:|--------|
+> | [tool_name] | [N] | [N] | Tested |
+> | [tool_name] | 0 | 0 | Not called |
+>
+> **[X]/[Y] tools tested ([Z]% coverage)**
+>
+> **Validation** *(from tool probes, if tool_probes were sent):*
+>
+> | Tool | Variation | Result | Detail |
+> |------|-----------|--------|--------|
+> | [tool_name] | valid | PASS | — |
+> | [tool_name] | missing_required | CAUGHT | Missing fields: [list] |
+> | [tool_name] | wrong_type | CAUGHT | Type mismatch: [details] |
+> | [tool_name] | empty_values | PASS | — |
+>
+> Validation summary: **[N] valid, [N] unknown tool, [N] schema violations**
+>
+> ---
+>
+> ### 4. Issues Found
 >
 > *If score is 80+ and no issues: "No resilience issues detected."*
 >
@@ -312,7 +349,7 @@ agentbreak history compare <old_id> <new_id>
 >
 > ---
 >
-> ### 4. Suggested Fixes
+> ### 5. Suggested Fixes
 >
 > | # | Issue | File | Fix | Why |
 > |--:|-------|------|-----|-----|
@@ -321,7 +358,7 @@ agentbreak history compare <old_id> <new_id>
 >
 > ---
 >
-> ### 5. Testing Caveat
+> ### 6. Testing Caveat
 >
 > **ONLY include this section if Step 7A (direct curl) was used. If Step 7B (through agent) was used, DELETE this entire section — do NOT include it in the report.**
 >
@@ -331,7 +368,7 @@ agentbreak history compare <old_id> <new_id>
 >
 > ---
 >
-> ### 6. Run Comparison
+> ### 7. Run Comparison
 >
 > *If history has a previous run:*
 >
@@ -346,7 +383,7 @@ agentbreak history compare <old_id> <new_id>
 >
 > ---
 >
-> ### 7. Next Steps
+> ### 8. Next Steps
 >
 > - If score 80+: "Agent is resilient. Consider adding to CI."
 > - If issues found: "Apply the fixes above, then re-run `/agentbreak:run-tests` to verify."

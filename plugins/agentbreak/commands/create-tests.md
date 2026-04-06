@@ -210,9 +210,65 @@ queries:
         file_path: "/recordings/one-on-one-sarah.wav"
 ```
 
-After writing the file, validate it makes sense and tell the user:
+## Generate tool probes
 
-> "Generated N test queries in `.agentbreak/queries.yaml` based on your agent's purpose and tools. These will be used when you run `/agentbreak:run-tests`."
+**If MCP is enabled and `.agentbreak/registry.json` has tools**, generate tool probing queries that test each tool with parameter variations.
+
+### How it works
+
+Read the registry. For each tool, look at its `inputSchema` — the `properties` and `required` fields tell you what the tool expects. Generate variations:
+
+| Variation | What to do | Why |
+|-----------|-----------|-----|
+| `valid` | All required fields, correct types, realistic values | Baseline — does it work? |
+| `missing_required` | Omit one required field | Does the agent/server handle missing args? |
+| `wrong_type` | Send string where int expected, null where string expected | Type validation |
+| `empty_values` | Empty strings, empty arrays, zero for numbers | Edge case handling |
+
+### Write to queries.yaml
+
+Add a `tool_probes` section alongside the existing `queries` section:
+
+```yaml
+version: 1
+queries:
+  llm: [...]
+  mcp: [...]
+tool_probes:
+  - tool: save_issue
+    variation: valid
+    arguments:
+      title: "Fix login timeout on mobile"
+      teamId: "TEAM-1"
+      description: "Users report login hanging after 30s on iOS"
+  - tool: save_issue
+    variation: missing_required
+    arguments:
+      title: "Fix login timeout on mobile"
+      # teamId intentionally omitted
+  - tool: save_issue
+    variation: wrong_type
+    arguments:
+      title: 12345
+      teamId: null
+  - tool: save_issue
+    variation: empty_values
+    arguments:
+      title: ""
+      teamId: ""
+```
+
+**Rules:**
+- Generate **4 variations per tool** (valid, missing_required, wrong_type, empty_values)
+- Use realistic values for the `valid` variation — not "test" or "foo"
+- For `missing_required`, pick the most important required field to omit
+- For `wrong_type`, use the opposite type (string→number, number→string, any→null)
+- Tool names MUST exactly match the registry
+- Only generate probes for tools that have an `inputSchema` with properties
+
+After writing the file, tell the user:
+
+> "Generated N contextual queries and M tool probes in `.agentbreak/queries.yaml`. The probes test each MCP tool with valid args, missing fields, wrong types, and empty values. Run `/agentbreak:run-tests` to execute."
 
 ## After creating scenarios
 

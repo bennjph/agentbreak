@@ -228,7 +228,7 @@ def test_validate_rejects_llm_timeout_fault(tmp_path: Path) -> None:
 
     result = runner.invoke(main.cli, ["validate", "--config", str(application_path), "--scenarios", str(scenarios_path)])
     assert result.exit_code != 0
-    assert "llm_chat timeout faults are not supported" in str(result.exception)
+    assert "llm_chat does not support these fault kinds" in str(result.exception)
 
 
 def test_mcp_only_mock_config_is_valid() -> None:
