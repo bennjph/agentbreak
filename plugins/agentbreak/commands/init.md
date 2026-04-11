@@ -141,6 +141,8 @@ For proxy mode, use the detected upstream URLs and auth env vars from Step 3. If
 - MCP only → `preset: standard-mcp` (7 baseline MCP scenarios)
 - Both → `preset: standard-all` (13 baseline scenarios)
 
+If the user wants security testing, also add `mcp-security` to the presets list.
+
 Present the generated config and ask for confirmation before writing.
 
 ## Step 6: Validate
@@ -196,9 +198,11 @@ Wait for the user's answer before proceeding. Only disable MCP if they explicitl
 
 After validation passes, tell the user what standard scenarios are included, then ask:
 
-> "Standard chaos tests are ready — these cover baseline faults like rate limits, server errors, latency, bad JSON, empty responses, and schema violations.
+> "Standard chaos tests are ready — these cover baseline reliability faults like rate limits, server errors, latency, bad JSON, empty responses, and schema violations.
 >
-> Want me to also analyze your codebase and generate project-specific scenarios? These target your specific tools, models, and failure modes."
+> Want me to also:
+> 1. **Generate project-specific scenarios** — target your specific tools, models, and failure modes
+> 2. **Add security scenarios** — test if your agent resists prompt injection, data exfiltration, and tool manipulation via `preset: mcp-security`"
 
 - If **yes** → analyze the codebase (read MCP registry for tool names, scan code for specific models and integrations), generate targeted scenarios, append them under the `scenarios:` key in `scenarios.yaml` (keeping the preset), re-validate.
 - If **no** → done, show next steps.

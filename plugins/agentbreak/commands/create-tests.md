@@ -67,14 +67,17 @@ All fields are optional. If set, ALL specified fields must match for the scenari
 
 | Field | Type | Required when | Validation rules |
 |-------|------|--------------|-----------------|
-| `kind`* | string | always | Must be one of the 8 kinds listed below |
+| `kind`* | string | always | Must be one of the 10 kinds listed below |
 | `status_code` | int | `http_error` | Must be provided for `http_error`, ignored otherwise |
 | `min_ms` | int | `latency`, `timeout` | Must be >= 0, must be <= `max_ms` |
 | `max_ms` | int | `latency`, `timeout` | Must be >= 0, must be >= `min_ms` |
 | `size_bytes` | int | `large_response` | Must be > 0 |
 | `body` | string | optional for `wrong_content` | Custom response body text |
+| `poison_type` | string | `tool_poisoning` | One of: `prompt_injection`, `exfiltration`, `cross_tool`, `many_shot` |
+| `payload` | string | optional for `tool_poisoning` | Custom payload text (overrides default from catalog) |
+| `after_count` | int | `rug_pull` | Must be > 0 |
 
-**All 8 fault kinds:**
+**All 10 fault kinds:**
 
 | Kind | What it does | Extra fields | Target restrictions |
 |------|-------------|-------------|-------------------|
@@ -86,6 +89,8 @@ All fields are optional. If set, ALL specified fields must match for the scenari
 | `schema_violation` | Returns 200 with corrupted structure | none | llm_chat, mcp_tool |
 | `wrong_content` | Returns 200 with replaced content | `body` (optional) | llm_chat, mcp_tool |
 | `large_response` | Returns 200 with oversized body | `size_bytes` (required) | llm_chat, mcp_tool |
+| `tool_poisoning` | Injects adversarial content into tool response | `poison_type` (required: `prompt_injection`, `exfiltration`, `cross_tool`, `many_shot`), `payload` (optional override) | **mcp_tool ONLY** |
+| `rug_pull` | Tool definitions mutate after N requests | `after_count` (required, > 0) | **mcp_tool ONLY** |
 
 ### ScheduleSpec
 
@@ -106,6 +111,18 @@ All fields are optional. If set, ALL specified fields must match for the scenari
 | `mcp-slow-tools` | mcp_tool | High-probability latency |
 | `mcp-tool-failures` | mcp_tool | 503 errors |
 | `mcp-mixed-transient` | mcp_tool | Mixed latency + errors |
+| `mcp-security` | mcp_tool | 5 MCP security scenarios (prompt injection, exfiltration, cross-tool, many-shot, rug pull) |
+
+## Fault catalog
+
+Each fault kind is defined in `agentbreak/faults/catalog/{category}/{fault_id}/manifest.yaml`. Browse the catalog to see all available faults, their descriptions, and required fields:
+
+```bash
+ls agentbreak/faults/catalog/reliability/
+ls agentbreak/faults/catalog/security/
+```
+
+Security faults like `tool_poisoning` include payload files in their folder (e.g. `payloads/prompt_injection.txt`). You can reference these via `poison_type` in the FaultSpec, or provide a custom `payload` string.
 
 Presets can be combined with explicit scenarios:
 
@@ -135,6 +152,7 @@ scenarios:
 4. **Cover multiple fault kinds.** At least one HTTP error, one latency spike, one response mutation.
 5. **Name scenarios clearly.** `search-tool-timeout` not `test-1`.
 6. **Remember: `timeout` is MCP only.** For LLM timeout simulation, use `kind: latency` with high values.
+7. **Test security if MCP is enabled.** Add `tool_poisoning` scenarios to test if the agent resists prompt injection via tool responses. Use `preset: mcp-security` for a quick start.
 
 ## Validation
 

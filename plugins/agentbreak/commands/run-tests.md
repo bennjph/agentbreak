@@ -302,9 +302,9 @@ agentbreak history compare <old_id> <new_id>
 >
 > ### 2. Scenario Results
 >
-> | Scenario | Fault | Target | Fired | Agent Behavior | Verdict |
-> |----------|-------|--------|------:|----------------|---------|
-> | [scenario-name] | [fault kind] | [llm/mcp] | [N]x | [Recovered / Crashed / Looped / Degraded] | PASS/FAIL |
+> | Scenario | Category | Fault | Target | Fired | Agent Behavior | Verdict |
+> |----------|----------|-------|--------|------:|----------------|---------|
+> | [scenario-name] | [reliability/security] | [fault kind] | [llm/mcp] | [N]x | [Recovered / Crashed / Looped / Degraded] | PASS/FAIL |
 >
 > For each FAIL row, add a one-line explanation below the table:
 > - **[scenario-name]:** [what went wrong, with evidence from logs]
