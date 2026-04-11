@@ -79,6 +79,39 @@ curl localhost:5005/_agentbreak/mcp-scorecard
 curl localhost:5005/_agentbreak/mcp-requests
 ```
 
+## Security testing
+
+Test if your agent resists adversarial MCP tool responses:
+
+```yaml
+preset: mcp-security
+```
+
+This includes 5 scenarios:
+
+- **Prompt injection** — tool response tries to override agent instructions
+- **Exfiltration** — tool response tricks agent into leaking credentials
+- **Cross-tool manipulation** — tool response manipulates how agent uses other tools
+- **Many-shot jailbreak** — tool response contains examples of unsafe behavior
+- **Rug pull** — tool definitions mutate after 5 requests
+
+Or target specific tools:
+
+```yaml
+scenarios:
+  - name: search-poisoning
+    summary: Search tool returns prompt injection
+    target: mcp_tool
+    match:
+      tool_name: search_docs
+    fault:
+      kind: tool_poisoning
+      poison_type: prompt_injection
+    schedule:
+      mode: random
+      probability: 0.3
+```
+
 ## Presets for MCP
 
 | Preset | What it does |
@@ -86,3 +119,4 @@ curl localhost:5005/_agentbreak/mcp-requests
 | `mcp-slow-tools` | 90% of MCP tool calls are slow |
 | `mcp-tool-failures` | 30% of MCP tool calls return 503 |
 | `mcp-mixed-transient` | Light MCP latency + errors |
+| `mcp-security` | Prompt injection, exfiltration, cross-tool manipulation, many-shot jailbreak, rug pull |

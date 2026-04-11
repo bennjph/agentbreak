@@ -21,6 +21,11 @@ Each scenario in `.agentbreak/scenarios.yaml` has a **target**, a **fault**, and
 | `schema_violation` | Corrupts response structure | — |
 | `wrong_content` | Replaces response content | `body` (optional) |
 | `large_response` | Returns oversized response | `size_bytes` |
+| `tool_poisoning` | Injects adversarial content into MCP tool responses | `poison_type` (`prompt_injection`, `exfiltration`, `cross_tool`, `many_shot`). Optional `payload`. **mcp_tool only.** |
+| `rug_pull` | Tool definitions silently mutate after N requests | `after_count` (> 0). **mcp_tool only.** |
+
+!!! note "Fault catalog"
+    Fault kinds are auto-discovered from `agentbreak/faults/catalog/`. Run `ls agentbreak/faults/catalog/` to browse available faults.
 
 ## Schedules
 
@@ -148,3 +153,4 @@ These provide baseline coverage. `agentbreak init` uses these by default.
 | `mcp-slow-tools` | MCP | 90% of MCP tool calls are slow |
 | `mcp-tool-failures` | MCP | 30% of MCP tool calls return 503 |
 | `mcp-mixed-transient` | MCP | Light MCP latency + errors |
+| `mcp-security` | MCP | Prompt injection, exfiltration, cross-tool manipulation, many-shot jailbreak, rug pull |

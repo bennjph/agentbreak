@@ -46,11 +46,13 @@ No code changes needed — just swap the base URL.
 ## What can it do?
 
 - **Simulate failures** — HTTP errors, latency spikes, timeouts, malformed JSON, schema violations
+- **Test security** — tool poisoning, rug pull attacks, and adversarial inputs via MCP tool responses
 - **Target specific things** — scope faults to a model (`gpt-4o`) or MCP tool (`search_docs`)
 - **Control timing** — faults on every request, randomly, or in periodic bursts
 - **Score resilience** — get a 0-100 score with pass/degraded/fail outcome
 - **Track over time** — compare runs to see if your agent is getting more resilient
 - **Test MCP** — proxy and fault-inject MCP tool calls, resource reads, and prompt gets
+- **Extensible fault catalog** — each fault is a YAML manifest in `agentbreak/faults/catalog/`; add new faults by creating a folder
 
 ## Claude Code
 
@@ -65,8 +67,7 @@ Then use `/agentbreak:init`, `/agentbreak:create-tests`, and `/agentbreak:run-te
 
 ## What's coming
 
-- Security scenarios (prompt injection, adversarial inputs)
-- MCP server chaos (tool call validation, poisoned responses)
+- **MCP security testing** — tool poisoning, rug pull, and tool call validation are live; more security scenarios in progress
 - Pattern-based and skill-based attacks
 - Deprecated library and model deprecation simulation
 

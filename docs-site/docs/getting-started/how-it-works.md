@@ -31,6 +31,9 @@ AgentBreak focuses on **infrastructure-level** failures, not semantic attacks. T
 | **Timeouts** | Requests that never complete | `timeout` with min/max milliseconds |
 | **Corruption** | Broken payloads | `invalid_json`, `empty_response`, `schema_violation` |
 | **Content drift** | Unexpected response content | `wrong_content`, `large_response` |
+| **Security** | Adversarial MCP responses | `tool_poisoning`, `rug_pull` |
+
+Each fault is defined declaratively in `agentbreak/faults/catalog/` as a YAML manifest. The proxy auto-discovers all faults at startup, so adding a new fault is just creating a folder with a `manifest.yaml`.
 
 ## Behavioral detection
 

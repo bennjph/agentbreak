@@ -43,6 +43,18 @@ AgentBreak reads two files from `.agentbreak/`:
 - **`application.yaml`** — what to proxy (LLM mode, MCP upstream, port)
 - **`scenarios.yaml`** — what faults to inject
 
+### Fault catalog
+
+AgentBreak ships with 10 built-in fault types across two categories:
+
+**Reliability** — HTTP errors, latency, timeouts, empty responses, invalid JSON, schema violations, wrong content, large responses
+
+**Security** — tool poisoning (prompt injection, exfiltration, cross-tool manipulation, many-shot jailbreaks), rug pulls (tool definitions that mutate after N requests)
+
+Each fault is defined as YAML in `agentbreak/faults/catalog/`. Adding a new fault is just a folder + `manifest.yaml` — no Python required for most faults.
+
+### Scenarios
+
 A scenario is just a target + a fault + a schedule:
 
 ```yaml
@@ -128,7 +140,7 @@ Three commands:
 
 ## What it actually measures
 
-AgentBreak doesn't score you on whether faults happen — it injected those on purpose. It scores **what your agent does after the fault**.
+AgentBreak doesn't score you on whether faults happen — it injected those on purpose. It scores **what your agent does after the fault** — both reliability failures (retries, error handling) and security failures (following poisoned instructions, leaking data).
 
 ```
 Agent sends request  →  AgentBreak injects 500 error  →  Agent retries  →  Success
@@ -182,8 +194,8 @@ For the full list of fault kinds, schedule modes, match filters, and config opti
 
 ## Roadmap
 
-- **Security scenarios** — prompt injection, data exfiltration attempts, and adversarial inputs
-- **MCP server chaos** — intentional tool call validation, schema mismatches, and poisoned tool responses
+- ~~**Security scenarios** — prompt injection, data exfiltration attempts, and adversarial inputs~~ Done (tool poisoning)
+- ~~**MCP server chaos** — tool call validation, schema mismatches, and poisoned tool responses~~ Done (tool poisoning + rug pull)
 - **Pattern-based attacks** — multi-step attack chains that exploit common agent reasoning patterns
 - **Skill-based attacks** — target agent skills/capabilities with adversarial tool sequences
 - **Deprecated library injection** — return responses referencing deprecated or vulnerable libraries

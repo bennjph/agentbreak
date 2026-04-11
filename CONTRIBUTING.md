@@ -26,8 +26,41 @@ agentbreak serve                   # start proxy
 | `agentbreak/config.py` | `application.yaml` Pydantic models, registry I/O |
 | `agentbreak/scenarios.py` | `scenarios.yaml` schema and validation |
 | `agentbreak/behaviors.py` | Response mutation helpers |
+| `agentbreak/faults/catalog/` | Fault definitions (manifest.yaml + optional payloads per fault) |
 | `agentbreak/discovery/mcp.py` | MCP server inspection |
 | `tests/` | Pytest suite (`agentbreak verify` runs these) |
+
+## Adding a new fault
+
+Each fault lives in `agentbreak/faults/catalog/{category}/{fault_id}/`. To add one:
+
+1. Create the folder: `mkdir -p agentbreak/faults/catalog/security/my_new_fault`
+2. Write `manifest.yaml`:
+   ```yaml
+   id: my_new_fault
+   name: My New Fault
+   category: security
+   severity: high
+   targets: [mcp_tool]
+   tags: [security, my-tag]
+
+   description: "What happens when this fault fires"
+   fix_hint: "How the agent should handle it"
+
+   phase: post          # pre (before upstream) or post (mutate response)
+   action: inject_text  # one of: delay, return_error, replace_body, inject_text, corrupt_json, corrupt_schema, large_body, wrong_content
+   params:
+     position: append
+     payload_dir: payloads/
+
+   required_fields: [poison_type]
+   ```
+3. Add payload files if needed: `payloads/variant_name.txt`
+4. Run `agentbreak verify` to confirm tests pass
+
+The fault is auto-discovered — no imports or registration needed.
+
+For complex faults that need custom logic, add a `handler.py` with `phase: custom` in the manifest. See `catalog/security/rug_pull/` for an example.
 
 ## Guidelines
 

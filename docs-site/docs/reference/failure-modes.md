@@ -19,6 +19,8 @@ What AgentBreak simulates — and what's out of scope.
 | `schema_violation` | yes | yes | Corrupts tool_calls (LLM) or result shape (MCP) |
 | `wrong_content` | yes | yes | Optional `body` field |
 | `large_response` | yes | yes | Requires `size_bytes` > 0 |
+| `tool_poisoning` | no | yes | Requires `poison_type`. Injects adversarial content into tool responses |
+| `rug_pull` | no | yes | Requires `after_count` > 0. Tool definitions mutate after N requests |
 
 ## Built-in behavioral detection
 
@@ -28,7 +30,6 @@ What AgentBreak simulates — and what's out of scope.
 
 ## Out of scope (for now)
 
-- Prompt injection
 - Memory poisoning
 - Queue replay
 - Checkpoint corruption

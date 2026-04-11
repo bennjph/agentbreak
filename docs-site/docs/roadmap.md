@@ -1,9 +1,11 @@
 # Roadmap
 
+## Shipped
+
+- **MCP security testing** — tool poisoning, rug pull attacks, and tool call validation are implemented. Adversarial inputs injected via MCP tool responses, prompt injection and data exfiltration testing are live.
+
 ## Planned Features
 
-- **Security scenarios** — prompt injection, data exfiltration attempts, and adversarial inputs
-- **MCP server chaos** — intentional tool call validation, schema mismatches, and poisoned tool responses
 - **Pattern-based attacks** — multi-step attack chains that exploit common agent reasoning patterns
 - **Skill-based attacks** — target agent skills/capabilities with adversarial tool sequences
 - **Deprecated library injection** — return responses referencing deprecated or vulnerable libraries

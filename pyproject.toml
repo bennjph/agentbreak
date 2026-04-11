@@ -5,11 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "agentbreak"
 version = "0.4.6"
-description = "Chaos proxy for testing LLM agent resilience — inject faults like latency, errors, and bad responses. Supports OpenAI, Anthropic, and MCP."
+description = "Chaos proxy for testing LLM agent resilience and security — inject faults, adversarial inputs, and protocol attacks. Supports OpenAI, Anthropic, and MCP."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-keywords = ["llm", "openai", "anthropic", "mcp", "proxy", "chaos-testing", "resilience", "agents", "fault-injection", "testing", "ai-agents"]
+keywords = ["llm", "openai", "anthropic", "mcp", "proxy", "chaos-testing", "resilience", "agents", "fault-injection", "testing", "ai-agents", "security", "adversarial", "prompt-injection", "red-team"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",
