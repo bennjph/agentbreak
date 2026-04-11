@@ -1,0 +1,15 @@
+id: large_response
+name: Large Response
+category: reliability
+severity: low
+targets: [llm_chat, mcp_tool]
+tags: [reliability, performance, size]
+
+description: "returned an oversized response and the agent struggled to parse it"
+fix_hint: "Set a max response size limit or truncate before parsing"
+
+phase: post
+action: large_body
+params: {}
+
+required_fields: [size_bytes]

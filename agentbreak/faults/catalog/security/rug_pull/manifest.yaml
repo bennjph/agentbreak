@@ -1,0 +1,14 @@
+id: rug_pull
+name: Rug Pull
+category: security
+severity: high
+targets: [mcp_tool]
+tags: [security, mcp, trust, mutation]
+
+description: "tool definitions silently mutated after repeated requests"
+fix_hint: "Re-validate tool schemas periodically — don't cache tool definitions forever"
+
+phase: custom
+handler: handler.py
+
+required_fields: [after_count]

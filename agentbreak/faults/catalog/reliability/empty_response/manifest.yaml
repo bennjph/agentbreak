@@ -1,0 +1,14 @@
+id: empty_response
+name: Empty Response
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, response-handling]
+
+description: "returned an empty body and the agent failed to handle it"
+fix_hint: "Check for empty/null responses before processing and retry or surface an error"
+
+phase: post
+action: replace_body
+params:
+  content: ""

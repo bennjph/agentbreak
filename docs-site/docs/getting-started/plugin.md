@@ -120,4 +120,4 @@ pkill -f "agentbreak serve"
 
 The plugin version is in `plugins/agentbreak/.claude-plugin/plugin.json`. Claude Code caches plugins by this version — bumping it ensures users get fresh files on reinstall.
 
-Current version: **0.4.5**
+Current version: **0.4.6**

@@ -233,19 +233,9 @@ Target = Literal[
 
 SUPPORTED_TARGETS = {"llm_chat", "mcp_tool"}
 
-FaultKind = Literal[
-    "http_error",
-    "latency",
-    "timeout",
-    "empty_response",
-    "invalid_json",
-    "schema_violation",
-    "wrong_content",
-    "large_response",
-    # MCP security faults
-    "tool_poisoning",
-    "rug_pull",
-]
+# Fault kinds are auto-discovered from agentbreak/faults/catalog/
+# Import at module level but use lazy initialization to avoid circular imports
+FaultKind = str  # Any registered fault kind — validated at load time
 
 ScheduleMode = Literal["always", "random", "periodic"]
 
@@ -285,19 +275,15 @@ class FaultSpec(BaseModel):
 
     @model_validator(mode="after")
     def validate_fault(self) -> "FaultSpec":
-        if self.kind == "http_error" and self.status_code is None:
-            raise ValueError("http_error faults require status_code")
+        from agentbreak.faults import REGISTRY
+        fault_def = REGISTRY.get(self.kind)
+        if fault_def is not None:
+            fault_def.validate(self)
+        # Keep basic bounds check for latency/timeout (belt and suspenders)
         if self.kind in {"latency", "timeout"}:
-            if self.min_ms is None or self.max_ms is None:
-                raise ValueError(f"{self.kind} faults require min_ms and max_ms")
-            if self.min_ms < 0 or self.max_ms < 0 or self.min_ms > self.max_ms:
-                raise ValueError("fault min_ms/max_ms must be valid non-negative bounds")
-        if self.kind == "large_response" and (self.size_bytes is None or self.size_bytes <= 0):
-            raise ValueError("large_response faults require size_bytes > 0")
-        if self.kind == "tool_poisoning" and self.poison_type is None:
-            raise ValueError("tool_poisoning faults require poison_type")
-        if self.kind == "rug_pull" and (self.after_count is None or self.after_count <= 0):
-            raise ValueError("rug_pull faults require after_count > 0")
+            if self.min_ms is not None and self.max_ms is not None:
+                if self.min_ms < 0 or self.max_ms < 0 or self.min_ms > self.max_ms:
+                    raise ValueError("fault min_ms/max_ms must be valid non-negative bounds")
         return self
 
 
@@ -359,6 +345,16 @@ def load_scenarios(path: str | None) -> ScenarioFile:
 
 
 def validate_scenarios(scenarios: ScenarioFile) -> None:
+    from agentbreak.faults import REGISTRY, registered_kinds
+
+    # Check for unknown fault kinds
+    known = registered_kinds()
+    if known:  # only validate if registry is populated
+        unknown = sorted({s.fault.kind for s in scenarios.scenarios if s.fault.kind not in known})
+        if unknown:
+            raise ValueError(f"Unknown fault kinds: {', '.join(unknown)}. Available: {', '.join(sorted(known))}")
+
+    # Check unsupported targets (keep existing logic)
     unsupported = sorted({scenario.target for scenario in scenarios.scenarios if scenario.target not in SUPPORTED_TARGETS})
     if unsupported:
         raise ValueError(
@@ -368,7 +364,13 @@ def validate_scenarios(scenarios: ScenarioFile) -> None:
             + ", ".join(sorted(SUPPORTED_TARGETS))
             + ". See docs/TODO_SCENARIOS.md for the roadmap."
         )
-    mcp_only_kinds = {"timeout", "tool_poisoning", "rug_pull"}
+
+    # Derive MCP-only kinds from registry instead of hardcoding
+    mcp_only_kinds = set()
+    for kind, fault_def in REGISTRY.items():
+        if fault_def.targets == {"mcp_tool"}:
+            mcp_only_kinds.add(kind)
+
     invalid = sorted(
         scenario.name
         for scenario in scenarios.scenarios

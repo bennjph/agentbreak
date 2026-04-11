@@ -1,0 +1,13 @@
+id: schema_violation
+name: Schema Violation
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, schema, validation]
+
+description: "returned valid JSON with a broken structure (e.g. missing tool_calls) and the agent didn't catch it"
+fix_hint: "Validate response structure before using fields like tool_calls or content"
+
+phase: post
+action: corrupt_schema
+params: {}

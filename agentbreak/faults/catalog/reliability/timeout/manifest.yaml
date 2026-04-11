@@ -1,0 +1,16 @@
+id: timeout
+name: Timeout
+category: reliability
+severity: high
+targets: [mcp_tool]
+tags: [reliability, timeout, mcp]
+
+description: "timed out on tool calls and the agent didn't recover"
+fix_hint: "Add timeout handling with a circuit breaker for repeated failures"
+
+phase: pre
+action: delay
+params:
+  then: return_timeout
+
+required_fields: [min_ms, max_ms]

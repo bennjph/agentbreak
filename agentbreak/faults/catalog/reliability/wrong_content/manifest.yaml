@@ -1,0 +1,13 @@
+id: wrong_content
+name: Wrong Content
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, content, validation]
+
+description: "returned unrelated content and the agent blindly used it"
+fix_hint: "Validate that the response is relevant before passing it downstream"
+
+phase: post
+action: wrong_content
+params: {}

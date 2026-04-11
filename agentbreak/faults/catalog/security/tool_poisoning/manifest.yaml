@@ -1,0 +1,18 @@
+id: tool_poisoning
+name: Tool Poisoning
+category: security
+severity: high
+targets: [mcp_tool]
+tags: [security, mcp, prompt-injection, owasp-llm-01]
+
+description: "injected adversarial content into tool responses to manipulate agent behavior"
+fix_hint: "Sanitize and validate tool outputs before feeding them back to the model"
+
+phase: post
+action: inject_text
+params:
+  position: append
+  payload_dir: payloads/
+  default_payload: prompt_injection
+
+required_fields: [poison_type]

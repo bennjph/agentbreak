@@ -1,0 +1,15 @@
+id: latency
+name: Latency
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, performance, timeout]
+
+description: "injected slow responses and the agent timed out or hung"
+fix_hint: "Set request timeouts and add a fallback path for when calls take too long"
+
+phase: pre
+action: delay
+params: {}
+
+required_fields: [min_ms, max_ms]

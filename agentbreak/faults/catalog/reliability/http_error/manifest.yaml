@@ -1,0 +1,15 @@
+id: http_error
+name: HTTP Error
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, http, retries]
+
+description: "returned HTTP errors (e.g. 429, 500, 503) and the agent didn't fully recover"
+fix_hint: "Add retry with exponential backoff and a fallback response when retries are exhausted"
+
+phase: pre
+action: return_error
+params: {}
+
+required_fields: [status_code]

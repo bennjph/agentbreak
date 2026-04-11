@@ -1,0 +1,13 @@
+id: invalid_json
+name: Invalid JSON
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, parsing, json]
+
+description: "returned malformed JSON and the agent crashed or passed garbage downstream"
+fix_hint: "Wrap JSON parsing in try/except — retry the call or return a safe default"
+
+phase: post
+action: corrupt_json
+params: {}
