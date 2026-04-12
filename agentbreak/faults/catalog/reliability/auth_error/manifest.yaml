@@ -1,0 +1,14 @@
+id: auth_error
+name: Authentication Error
+category: reliability
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [reliability, http, auth, credentials]
+
+description: "returned a 401 authentication error (invalid/expired API key) and the agent didn't handle it"
+fix_hint: "Detect 401 errors and refresh credentials, re-authenticate, or surface a clear error to the user"
+
+phase: pre
+action: return_error
+params:
+  status: 401

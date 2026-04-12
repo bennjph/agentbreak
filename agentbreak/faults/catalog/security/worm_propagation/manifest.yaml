@@ -1,0 +1,16 @@
+id: worm_propagation
+name: Worm Propagation
+category: security
+severity: high
+targets: [mcp_tool]
+tags: [security, worm, self-replication, rag, multi-agent]
+
+description: "tool response contained self-replicating prompt that poisons other tools' context (Morris-II pattern)"
+fix_hint: "Implement content isolation — don't allow one tool's output to propagate into other tools' stored context"
+
+phase: post
+action: inject_text
+params:
+  position: append
+  payload_dir: payloads/
+  default_payload: worm

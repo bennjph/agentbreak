@@ -1,0 +1,14 @@
+id: orchestrator_crash
+name: Orchestrator Crash
+category: multi_agent
+severity: high
+targets: [llm_chat]
+tags: [multi-agent, orchestrator, crash, recovery]
+
+description: "the orchestrator agent crashed mid-workflow and sub-agents became orphaned with no coordinator"
+fix_hint: "Implement heartbeat monitoring and orchestrator failover — sub-agents should timeout and self-terminate"
+
+phase: pre
+action: return_error
+params:
+  status: 500

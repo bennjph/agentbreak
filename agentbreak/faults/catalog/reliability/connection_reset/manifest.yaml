@@ -1,0 +1,14 @@
+id: connection_reset
+name: Connection Reset
+category: reliability
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [reliability, network, connection, infrastructure]
+
+description: "connection was reset before any response (simulating load balancer failure) and the agent crashed"
+fix_hint: "Catch ConnectionError/ConnectionResetError and retry with backoff"
+
+phase: pre
+action: return_error
+params:
+  status: 502

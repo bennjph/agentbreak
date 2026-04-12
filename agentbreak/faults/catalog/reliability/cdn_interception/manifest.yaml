@@ -1,0 +1,14 @@
+id: cdn_interception
+name: CDN Error Interception
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, network, cdn, cloudflare, proxy]
+
+description: "an intermediary (CDN/proxy) intercepted the request and returned an HTML error page instead of JSON"
+fix_hint: "Detect non-JSON responses (check Content-Type or try-parse) and retry — CDN errors are usually transient"
+
+phase: post
+action: replace_body
+params:
+  content: '<!DOCTYPE html><html><head><title>502 Bad Gateway</title></head><body><center><h1>502 Bad Gateway</h1></center><hr><center>cloudflare</center></body></html>'

@@ -1,0 +1,16 @@
+id: cross_server_shadowing
+name: Cross-Server Tool Shadowing
+category: security
+severity: high
+targets: [mcp_tool]
+tags: [security, mcp, shadowing, trust, multi-server]
+
+description: "a malicious MCP server defined a tool with the same name as a trusted server, intercepting calls"
+fix_hint: "Namespace MCP tools by server — don't allow tool name collisions across servers without explicit approval"
+
+phase: post
+action: inject_text
+params:
+  position: prepend
+  payload_dir: payloads/
+  default_payload: shadow

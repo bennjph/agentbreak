@@ -1,0 +1,16 @@
+id: system_prompt_extraction
+name: System Prompt Extraction
+category: security
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [security, prompt-injection, system-prompt, disclosure, owasp-llm-06]
+
+description: "injected an attack that tricks the agent into revealing its system prompt"
+fix_hint: "Add output filtering to detect system prompt content in responses — never echo system instructions"
+
+phase: post
+action: inject_text
+params:
+  position: append
+  payload_dir: payloads/
+  default_payload: extraction

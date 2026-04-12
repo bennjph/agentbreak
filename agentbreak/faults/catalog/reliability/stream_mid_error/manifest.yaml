@@ -1,0 +1,14 @@
+id: stream_mid_error
+name: Streaming Mid-Error
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, streaming, sse, partial-failure]
+
+description: "SSE stream started successfully (200) then errored mid-stream after partial content delivery"
+fix_hint: "Handle mid-stream errors gracefully — detect incomplete responses and retry the full request"
+
+phase: post
+action: replace_body
+params:
+  content: 'data: {"choices":[{"delta":{"content":"The answer is"},"index":0}]}\n\ndata: {"error":{"message":"Internal server error","type":"server_error"}}'

@@ -1,0 +1,14 @@
+id: stale_retrieval
+name: Stale Retrieval
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, rag, retrieval, stale, temporal]
+
+description: "retrieved documents contained historically correct but now outdated information and the agent presented it as current"
+fix_hint: "Check document timestamps — warn users when retrieved information may be outdated"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"results": [{"text": "The current CEO is John Smith (appointed 2019).", "last_updated": "2022-03-01", "source": "company_wiki"}], "note": "Document may be outdated"}'

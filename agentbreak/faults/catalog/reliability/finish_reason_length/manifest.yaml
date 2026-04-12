@@ -1,0 +1,13 @@
+id: finish_reason_length
+name: Context Window Exhausted
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, context-window, truncation, tokens]
+
+description: "the LLM hit its context window limit (finish_reason: length) and the agent used the truncated response"
+fix_hint: "Check finish_reason — if 'length', the response is incomplete. Summarize context and retry with shorter input"
+
+phase: post
+action: corrupt_schema
+params: {}

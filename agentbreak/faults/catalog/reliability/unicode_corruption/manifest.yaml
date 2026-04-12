@@ -1,0 +1,14 @@
+id: unicode_corruption
+name: Unicode Corruption
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, encoding, unicode, parsing]
+
+description: "returned content with invalid UTF-8 sequences or null bytes and the agent's parser crashed"
+fix_hint: "Use errors='replace' or errors='ignore' when decoding response text — never assume valid UTF-8"
+
+phase: post
+action: replace_body
+params:
+  content: '{"choices":[{"message":{"content":"Here is the result: \xff\xfe corrupted \x00 data"}}]}'

@@ -1,0 +1,14 @@
+id: cascade_failure
+name: Cascading Agent Failure
+category: multi_agent
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [multi-agent, cascade, error-propagation, resilience]
+
+description: "one agent's error propagated through the chain, amplifying through each subsequent agent"
+fix_hint: "Implement circuit breakers between agents — isolate failures to prevent cascading through the pipeline"
+
+phase: post
+action: wrong_content
+params:
+  text: "ERROR_PROPAGATED: Upstream agent failed with: 'ERROR_PROPAGATED: Upstream agent failed with: ERROR_PROPAGATED: Original error: connection timeout'. Depth: 3. All downstream tasks aborted."

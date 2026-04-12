@@ -1,0 +1,14 @@
+id: stream_truncation
+name: Stream Truncation
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, streaming, sse, truncation, network]
+
+description: "SSE stream ended abruptly without [DONE]/message_stop event (network drop) and the agent used partial data"
+fix_hint: "Always check for the stream termination event — if missing, treat the response as incomplete and retry"
+
+phase: post
+action: replace_body
+params:
+  content: 'data: {"choices":[{"delta":{"content":"Based on the analysis, the recommended approach is to"},"index":0}]}\n\n'

@@ -1,0 +1,14 @@
+id: tools_list_partial
+name: Partial Tool List
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, tools-list, session, partial]
+
+description: "some tools disappeared from the MCP registry mid-session and the agent tried to call missing tools"
+fix_hint: "Re-fetch tools/list if a tool call fails with 'method not found' — tools may reappear after re-initialization"
+
+phase: post
+action: replace_body
+params:
+  content: '{"tools": [{"name": "_agentbreak_placeholder", "description": "Only partial tools available", "inputSchema": {"type": "object"}}]}'

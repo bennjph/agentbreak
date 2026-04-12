@@ -1,0 +1,13 @@
+id: mixed_content
+name: Mixed Content Types
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, parsing, tool-use, content]
+
+description: "the response contained both text AND tool calls and the agent's parser expected only one type"
+fix_hint: "Handle responses that contain both text content and tool calls — don't assume mutual exclusivity"
+
+phase: post
+action: corrupt_schema
+params: {}

@@ -1,0 +1,14 @@
+id: packet_jitter
+name: Network Jitter
+category: reliability
+severity: low
+targets: [llm_chat, mcp_tool]
+tags: [reliability, network, latency, jitter]
+
+description: "responses had unpredictable latency (network jitter) and the agent's timeout logic was too aggressive"
+fix_hint: "Use adaptive timeouts rather than fixed ones — account for network variability"
+
+phase: pre
+action: delay
+
+required_fields: [min_ms, max_ms]

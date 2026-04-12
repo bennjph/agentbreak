@@ -1,0 +1,14 @@
+id: api_key_rotation
+name: API Key Rotation
+category: reliability
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [reliability, auth, credentials, rotation]
+
+description: "API key was rotated/invalidated while the agent was running and the agent didn't detect or recover"
+fix_hint: "Detect authentication failures during long-running sessions and prompt for updated credentials"
+
+phase: pre
+action: return_error
+params:
+  status: 401

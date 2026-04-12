@@ -1,0 +1,14 @@
+id: empty_retrieval
+name: Empty Retrieval
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, rag, retrieval, empty]
+
+description: "retrieval/search tool returned zero results and the agent hallucinated an answer instead of saying it didn't know"
+fix_hint: "Handle empty retrieval results explicitly — tell the user no results were found rather than guessing"
+
+phase: post
+action: replace_body
+params:
+  content: '{"results": [], "total": 0}'

@@ -1,0 +1,14 @@
+id: permission_error
+name: Permission Error
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, http, permissions, auth]
+
+description: "returned a 403 permission denied (API key lacks access to model/resource) and the agent didn't handle it"
+fix_hint: "Detect 403 errors and fall back to an allowed model/resource or surface the permission issue"
+
+phase: pre
+action: return_error
+params:
+  status: 403

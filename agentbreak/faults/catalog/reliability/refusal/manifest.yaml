@@ -1,0 +1,14 @@
+id: refusal
+name: Safety Refusal
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, safety, false-positive, refusal]
+
+description: "the LLM returned a safety refusal for a benign request and the agent didn't retry or rephrase"
+fix_hint: "Detect refusal responses and retry with rephrased input or fall back to an alternative model"
+
+phase: post
+action: wrong_content
+params:
+  text: "I'm sorry, but I can't assist with that request. This content may violate our usage policies. Please try a different query."

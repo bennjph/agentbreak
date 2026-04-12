@@ -1,0 +1,14 @@
+id: rate_limit_retry_after
+name: Rate Limit with Retry-After
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, http, rate-limit, backoff]
+
+description: "returned 429 with a Retry-After header and the agent didn't respect the wait time"
+fix_hint: "Parse the Retry-After header and wait the specified duration before retrying"
+
+phase: pre
+action: return_error
+params:
+  status: 429

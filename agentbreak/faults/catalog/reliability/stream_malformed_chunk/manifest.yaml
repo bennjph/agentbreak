@@ -1,0 +1,14 @@
+id: stream_malformed_chunk
+name: Malformed Stream Chunk
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, streaming, sse, parsing]
+
+description: "SSE stream delivered a corrupted chunk mid-stream and the agent's parser crashed"
+fix_hint: "Wrap each SSE chunk parse in try/except — skip malformed chunks or retry the full request"
+
+phase: post
+action: replace_body
+params:
+  content: 'data: {"choices":[{"delta":{"content":"Hello"},"index":0}]}\n\ndata: {not valid json\n\ndata: {"choices":[{"delta":{"content":" world"},"index":0}]}\n\n'

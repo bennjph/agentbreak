@@ -1,0 +1,14 @@
+id: irrelevant_retrieval
+name: Irrelevant Retrieval
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, rag, retrieval, relevance]
+
+description: "retrieval returned semantically similar but factually irrelevant results and the agent used them anyway"
+fix_hint: "Add relevance scoring threshold — discard retrieved documents below a confidence score"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"results": [{"text": "The weather in Paris is typically mild in spring with temperatures around 15°C.", "score": 0.82}], "query": "quarterly revenue report"}'

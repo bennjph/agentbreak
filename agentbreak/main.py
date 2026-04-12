@@ -1017,10 +1017,6 @@ def should_apply_scenario(scenario: Scenario, count: int) -> bool:
     return (count - 1) % scenario.schedule.every < scenario.schedule.length
 
 
-async def apply_latency_fault(scenario: Scenario) -> None:
-    assert scenario.fault.min_ms is not None and scenario.fault.max_ms is not None
-    await asyncio.sleep(random.randint(scenario.fault.min_ms, scenario.fault.max_ms) / 1000)
-
 
 def _should_mock_tool_call(payload: dict[str, Any]) -> dict[str, Any] | None:
     """Check if the request has tools and the last message isn't a tool result — if so, return a mock tool call."""

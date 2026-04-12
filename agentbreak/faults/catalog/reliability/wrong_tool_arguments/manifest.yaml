@@ -1,0 +1,13 @@
+id: wrong_tool_arguments
+name: Wrong Tool Arguments
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, tool-use, schema, validation]
+
+description: "the LLM called a tool with malformed or wrong-type arguments and the agent didn't validate before calling"
+fix_hint: "Validate tool call arguments against the tool's schema before execution"
+
+phase: post
+action: corrupt_schema
+params: {}

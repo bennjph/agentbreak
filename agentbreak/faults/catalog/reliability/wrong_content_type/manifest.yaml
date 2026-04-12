@@ -1,0 +1,14 @@
+id: wrong_content_type
+name: Wrong Content-Type
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, http, content-type, parsing]
+
+description: "returned text/html instead of application/json (e.g. CDN error page) and the agent failed to parse"
+fix_hint: "Check Content-Type header before parsing — if not application/json, retry or handle gracefully"
+
+phase: post
+action: replace_body
+params:
+  content: "<html><body><h1>502 Bad Gateway</h1><p>The server is temporarily unavailable.</p></body></html>"

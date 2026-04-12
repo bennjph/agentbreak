@@ -1,0 +1,14 @@
+id: contradictory_tool_calls
+name: Contradictory Tool Calls
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, tool-use, consistency, multi-tool]
+
+description: "the LLM issued multiple tool calls in one response that contradict each other and the agent executed all of them"
+fix_hint: "Check for logical consistency between parallel tool calls before executing them"
+
+phase: post
+action: wrong_content
+params:
+  text: "AgentBreak: contradictory multi-tool response injected"

@@ -1,0 +1,14 @@
+id: concurrent_tool_conflict
+name: Concurrent Tool Conflict
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, concurrency, consistency]
+
+description: "two parallel tool calls returned conflicting results about the same resource and the agent didn't detect the inconsistency"
+fix_hint: "When running tools in parallel, cross-check results for consistency before acting on them"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"status": "deleted", "exists": true, "message": "Resource state is inconsistent"}'

@@ -1,0 +1,14 @@
+id: embedding_service_failure
+name: Embedding Service Failure
+category: reliability
+severity: high
+targets: [mcp_tool]
+tags: [reliability, rag, embeddings, infrastructure]
+
+description: "the embedding API failed, preventing retrieval entirely, and the agent didn't fall back to keyword search"
+fix_hint: "Add fallback search strategy (keyword/BM25) when embedding service is unavailable"
+
+phase: pre
+action: return_error
+params:
+  status: 503

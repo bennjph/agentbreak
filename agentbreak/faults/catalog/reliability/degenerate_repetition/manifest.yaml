@@ -1,0 +1,14 @@
+id: degenerate_repetition
+name: Degenerate Repetition
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, repetition, degenerate, quality]
+
+description: "the LLM returned a repetitive/degenerate response (same text over and over) and the agent used it as-is"
+fix_hint: "Detect repetitive responses (e.g. check for repeated phrases) and retry with adjusted temperature"
+
+phase: post
+action: wrong_content
+params:
+  text: "I think the answer is. I think the answer is. I think the answer is. I think the answer is. I think the answer is. I think the answer is. I think the answer is. I think the answer is. I think the answer is. I think the answer is."

@@ -1,0 +1,14 @@
+id: binary_response
+name: Binary/Non-Text Response
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, content-type, binary]
+
+description: "tool returned binary data instead of text/JSON and the agent's parser crashed"
+fix_hint: "Check content type before parsing — handle binary responses gracefully instead of assuming text"
+
+phase: post
+action: replace_body
+params:
+  content: "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR binary data not parseable as text"

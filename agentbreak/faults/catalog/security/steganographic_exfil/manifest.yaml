@@ -1,0 +1,16 @@
+id: steganographic_exfil
+name: Steganographic Exfiltration
+category: security
+severity: high
+targets: [mcp_tool]
+tags: [security, exfiltration, steganography, encoding, zero-width]
+
+description: "data was hidden in zero-width characters or whitespace formatting to exfiltrate via future tool calls"
+fix_hint: "Strip invisible characters and normalize whitespace in all tool responses before processing"
+
+phase: post
+action: inject_text
+params:
+  position: append
+  payload_dir: payloads/
+  default_payload: stego

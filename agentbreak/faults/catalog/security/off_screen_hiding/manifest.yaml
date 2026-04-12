@@ -1,0 +1,16 @@
+id: off_screen_hiding
+name: Off-Screen Data Hiding
+category: security
+severity: medium
+targets: [mcp_tool]
+tags: [security, exfiltration, ui, formatting, obfuscation]
+
+description: "tool response used excessive whitespace/formatting to push sensitive data off-screen in user UIs"
+fix_hint: "Normalize whitespace in tool output before displaying — detect and flag responses with unusual formatting"
+
+phase: post
+action: inject_text
+params:
+  position: append
+  payload_dir: payloads/
+  default_payload: offscreen

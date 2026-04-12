@@ -1,0 +1,14 @@
+id: overloaded
+name: API Overloaded
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, http, capacity, anthropic]
+
+description: "returned a 529 overloaded error (Anthropic-specific) and the agent didn't back off"
+fix_hint: "Detect 529 errors and implement exponential backoff — this is different from 429 rate limits"
+
+phase: pre
+action: return_error
+params:
+  status: 529

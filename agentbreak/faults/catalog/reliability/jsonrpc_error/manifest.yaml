@@ -1,0 +1,14 @@
+id: jsonrpc_error
+name: JSON-RPC Protocol Error
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, jsonrpc, protocol]
+
+description: "MCP server returned a JSON-RPC error code (-32700 parse, -32601 method not found, etc.) and the agent didn't handle it"
+fix_hint: "Handle standard JSON-RPC error codes — map -32601 to 'tool not found', -32602 to 'invalid params', etc."
+
+phase: post
+action: replace_body
+params:
+  content: '{"jsonrpc": "2.0", "error": {"code": -32601, "message": "Method not found"}, "id": 1}'

@@ -1,0 +1,14 @@
+id: tool_pagination_fail
+name: Tool Pagination Failure
+category: reliability
+severity: low
+targets: [mcp_tool]
+tags: [reliability, mcp, pagination, truncation]
+
+description: "tool returned truncated paginated results with no cursor/next token and the agent treated partial data as complete"
+fix_hint: "Check for pagination metadata (cursor, hasMore, total) — warn users if results may be incomplete"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"items": [{"id": 1}], "total": 500}'

@@ -1,0 +1,13 @@
+id: hallucinated_tool_call
+name: Hallucinated Tool Call
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, tool-use, hallucination, validation]
+
+description: "the LLM invoked a tool name that doesn't exist in the agent's tool set and the agent tried to execute it"
+fix_hint: "Validate tool names against the registered tool set before execution — reject unknown tools"
+
+phase: post
+action: corrupt_schema
+params: {}

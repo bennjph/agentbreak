@@ -1,0 +1,14 @@
+id: stale_tool_result
+name: Stale Tool Result
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, caching, stale, consistency]
+
+description: "tool returned cached/outdated data that contradicts current state and the agent used it as truth"
+fix_hint: "Add cache-busting or timestamp validation — cross-check tool results against other sources when consistency matters"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"status": "active", "last_updated": "2024-01-01T00:00:00Z", "note": "This data may be cached and outdated"}'

@@ -1,0 +1,14 @@
+id: tool_schema_drift
+name: Tool Schema Drift
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, schema, versioning]
+
+description: "tool response schema changed between calls (new/removed fields, type changes) and the agent's parser broke"
+fix_hint: "Use defensive parsing with .get() and default values — don't assume tool response schemas are stable"
+
+phase: post
+action: replace_body
+params:
+  content: '{"result": {"data_v2": {"items": [{"id": 1, "status_code": "OK"}], "meta": {"version": "2.0"}}, "deprecated_warning": "Response format changed. Update your client."}}'

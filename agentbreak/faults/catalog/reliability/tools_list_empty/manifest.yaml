@@ -1,0 +1,14 @@
+id: tools_list_empty
+name: Empty Tool List
+category: reliability
+severity: high
+targets: [mcp_tool]
+tags: [reliability, mcp, tools-list, session]
+
+description: "MCP server returned an empty tool list (all tools disappeared) and the agent didn't handle it"
+fix_hint: "Check if tools/list returns empty and retry — treat it as a session issue, not a permanent state"
+
+phase: post
+action: replace_body
+params:
+  content: '{"tools": []}'

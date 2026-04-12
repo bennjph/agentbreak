@@ -1,0 +1,14 @@
+id: tool_permission_denied
+name: Tool Permission Denied
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, auth, permissions]
+
+description: "tool returned a permission error after previously working and the agent didn't handle the auth change"
+fix_hint: "Handle permission errors from tools with retry after re-authentication — permissions can change mid-session"
+
+phase: pre
+action: return_error
+params:
+  status: 403

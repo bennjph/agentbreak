@@ -1,0 +1,13 @@
+id: partial_tool_call
+name: Partial Tool Call
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, tool-use, parsing, truncation]
+
+description: "returned a truncated tool_use/function_call block (incomplete JSON arguments) and the agent crashed"
+fix_hint: "Validate tool call arguments are complete JSON before execution — retry if truncated"
+
+phase: post
+action: corrupt_schema
+params: {}

@@ -1,0 +1,14 @@
+id: request_too_large
+name: Request Too Large
+category: reliability
+severity: medium
+targets: [llm_chat]
+tags: [reliability, http, size, context-window]
+
+description: "returned a 413 request too large error and the agent didn't reduce its payload"
+fix_hint: "Detect 413 errors and truncate context, split the request, or summarize before retrying"
+
+phase: pre
+action: return_error
+params:
+  status: 413

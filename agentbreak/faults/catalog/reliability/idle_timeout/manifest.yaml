@@ -1,0 +1,16 @@
+id: idle_timeout
+name: Idle Connection Timeout
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, network, timeout, keepalive]
+
+description: "connection hung indefinitely with no data (idle timeout) and the agent waited forever"
+fix_hint: "Set socket-level read timeouts and handle timeout exceptions with retry logic"
+
+phase: pre
+action: delay
+params:
+  then: return_timeout
+  min_ms: 30000
+  max_ms: 60000

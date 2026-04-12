@@ -1,0 +1,14 @@
+id: contradictory_docs
+name: Contradictory Retrieved Documents
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, rag, retrieval, consistency, conflict]
+
+description: "retrieved documents provided conflicting information and the agent didn't flag the contradiction"
+fix_hint: "Cross-check retrieved documents for consistency — flag contradictions to the user rather than picking arbitrarily"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"results": [{"text": "The project deadline is March 15, 2025.", "source": "doc_a"}, {"text": "The project deadline was extended to April 30, 2025.", "source": "doc_b"}]}'

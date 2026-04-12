@@ -1,0 +1,12 @@
+id: tool_description_injection
+name: Tool Description Injection
+category: security
+severity: high
+targets: [mcp_tool]
+tags: [security, mcp, tool-poisoning, description, metadata]
+
+description: "malicious instructions were hidden in tool description metadata and the agent followed them"
+fix_hint: "Don't trust tool descriptions as instructions — treat them as untrusted metadata for display only"
+
+phase: custom
+handler: handler.py

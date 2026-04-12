@@ -1,0 +1,14 @@
+id: token_expiry
+name: Token Expiry Mid-Request
+category: reliability
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [reliability, auth, oauth, token, session]
+
+description: "OAuth token expired between request start and response and the agent didn't refresh credentials"
+fix_hint: "Implement token refresh logic — detect 401 during active session and auto-refresh before retrying"
+
+phase: pre
+action: return_error
+params:
+  status: 401

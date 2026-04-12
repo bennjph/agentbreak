@@ -1,0 +1,14 @@
+id: origin_rejection
+name: Origin Header Rejection
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, cors, origin, http]
+
+description: "MCP server rejected the request due to Origin header mismatch and the agent didn't handle it"
+fix_hint: "Detect CORS/origin rejection errors and verify the Origin header matches the server's allowlist"
+
+phase: pre
+action: return_error
+params:
+  status: 403

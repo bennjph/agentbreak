@@ -1,0 +1,16 @@
+id: agent_deadlock
+name: Agent Deadlock
+category: multi_agent
+severity: high
+targets: [llm_chat]
+tags: [multi-agent, deadlock, hang, timeout]
+
+description: "two agents waited for each other's output indefinitely creating a deadlock"
+fix_hint: "Set timeouts on inter-agent communication and implement deadlock detection with cycle-breaking logic"
+
+phase: pre
+action: delay
+params:
+  then: return_timeout
+  min_ms: 30000
+  max_ms: 60000

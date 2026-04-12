@@ -1,0 +1,14 @@
+id: session_expiry
+name: MCP Session Expiry
+category: reliability
+severity: high
+targets: [mcp_tool]
+tags: [reliability, mcp, session, expiry, reconnection]
+
+description: "MCP server returned 404 for a previously valid session ID and the agent didn't re-initialize"
+fix_hint: "Detect session expiry (404 on tool calls) and re-initialize the MCP session automatically"
+
+phase: pre
+action: return_error
+params:
+  status: 404

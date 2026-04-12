@@ -1,0 +1,14 @@
+id: truncated_context
+name: Truncated Retrieved Context
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, rag, retrieval, truncation, context-window]
+
+description: "retrieved content was truncated due to token limits, losing critical information at the end"
+fix_hint: "Detect truncation markers and either fetch the full document or warn that context may be incomplete"
+
+phase: post
+action: wrong_content
+params:
+  text: '{"text": "The medication dosage for adults is 500mg twice daily. For children under 12, the dosage should be adjusted to... [TRUNCATED]", "truncated": true}'

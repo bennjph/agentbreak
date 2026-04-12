@@ -1,0 +1,14 @@
+id: token_count_mismatch
+name: Token Count Mismatch
+category: reliability
+severity: low
+targets: [llm_chat]
+tags: [reliability, billing, monitoring, tokens]
+
+description: "the usage field reported different token counts than actual content and the agent's cost tracking was wrong"
+fix_hint: "Don't blindly trust the usage field for critical decisions — cross-check with a local tokenizer if accuracy matters"
+
+phase: post
+action: wrong_content
+params:
+  text: "This is a short response."

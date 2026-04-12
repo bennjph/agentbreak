@@ -1,0 +1,14 @@
+id: scope_downgrade
+name: Permission Scope Downgrade
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, auth, permissions, scope]
+
+description: "API suddenly returned 403 for previously allowed operations and the agent didn't handle the permission change"
+fix_hint: "Handle mid-session permission changes — re-authenticate or inform the user about reduced access"
+
+phase: pre
+action: return_error
+params:
+  status: 403

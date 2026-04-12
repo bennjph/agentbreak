@@ -1,0 +1,14 @@
+id: tool_error_result
+name: Tool Error Result
+category: reliability
+severity: medium
+targets: [mcp_tool]
+tags: [reliability, mcp, error, tool-call]
+
+description: "tool call returned isError:true with an error message (MCP-level error) and the agent didn't handle it"
+fix_hint: "Check the isError field in MCP tool results — handle tool-level errors differently from transport errors"
+
+phase: post
+action: replace_body
+params:
+  content: '{"content": [{"type": "text", "text": "Error: Permission denied. You do not have access to this resource."}], "isError": true}'

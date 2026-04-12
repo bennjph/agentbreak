@@ -1,0 +1,14 @@
+id: billing_error
+name: Billing Error
+category: reliability
+severity: high
+targets: [llm_chat]
+tags: [reliability, http, billing, account]
+
+description: "returned a 402 billing/payment error and the agent didn't handle it"
+fix_hint: "Detect 402 errors and alert the user about billing issues rather than silently failing"
+
+phase: pre
+action: return_error
+params:
+  status: 402

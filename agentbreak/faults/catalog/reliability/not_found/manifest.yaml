@@ -1,0 +1,14 @@
+id: not_found
+name: Not Found
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, http, routing]
+
+description: "returned a 404 not found (model/endpoint/resource disappeared) and the agent didn't handle it"
+fix_hint: "Detect 404 errors and fall back to an alternative model/endpoint or surface a clear error"
+
+phase: pre
+action: return_error
+params:
+  status: 404

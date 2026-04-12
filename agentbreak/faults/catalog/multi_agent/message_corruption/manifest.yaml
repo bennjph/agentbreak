@@ -1,0 +1,14 @@
+id: message_corruption
+name: Inter-Agent Message Corruption
+category: multi_agent
+severity: high
+targets: [llm_chat, mcp_tool]
+tags: [multi-agent, communication, corruption, reliability]
+
+description: "inter-agent messages were garbled/corrupted and the receiving agent acted on bad data"
+fix_hint: "Add message integrity checks (checksums/signatures) between agents and retry on corruption"
+
+phase: post
+action: replace_body
+params:
+  content: '{"role": "assistant", "content": "T\x00he res\xffult of th\xfee sub-task i\x00s: [CORRUPTED_DATA_BLOCK] ...proceed with cau..."}'

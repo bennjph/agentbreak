@@ -1,0 +1,14 @@
+id: duplicate_task
+name: Duplicate Task Execution
+category: multi_agent
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [multi-agent, deduplication, consistency, idempotency]
+
+description: "the same task was assigned to multiple agents producing conflicting results"
+fix_hint: "Implement idempotency keys and task deduplication — detect and reconcile when multiple agents complete the same task"
+
+phase: post
+action: wrong_content
+params:
+  text: "Task result (Agent B): The analysis shows 15 items matching criteria. [CONFLICT: Agent A already reported 23 items for the same query with different filtering.]"

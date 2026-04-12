@@ -1,0 +1,14 @@
+id: intermittent_flapping
+name: Intermittent Flapping
+category: reliability
+severity: medium
+targets: [llm_chat, mcp_tool]
+tags: [reliability, network, flapping, instability]
+
+description: "responses alternated between success and failure and the agent's retry logic couldn't stabilize"
+fix_hint: "Implement circuit breaker pattern — after N failures in a window, stop retrying and use fallback"
+
+phase: pre
+action: return_error
+params:
+  status: 503
