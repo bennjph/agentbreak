@@ -362,7 +362,7 @@ def validate_scenarios(scenarios: ScenarioFile) -> None:
             + ", ".join(unsupported)
             + ". Currently supported: "
             + ", ".join(sorted(SUPPORTED_TARGETS))
-            + ". See docs/TODO_SCENARIOS.md for the roadmap."
+            + "."
         )
 
     # Derive MCP-only kinds from registry instead of hardcoding
