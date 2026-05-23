@@ -2004,20 +2004,6 @@ def verify() -> None:
     subprocess.run(command, cwd=repo_root, check=True)
 
 
-@cli.command("mcp-server", help="Start AgentBreak as an MCP server for Claude Code.")
-def mcp_server_command() -> None:
-    try:
-        from agentbreak.mcp_server import run_server
-    except ImportError:
-        typer.echo(
-            "MCP server requires the mcp package. Install it with:\n\n"
-            "  pip install mcp\n",
-            err=True,
-        )
-        raise typer.Exit(code=1)
-    run_server()
-
-
 history_cli = typer.Typer(help="View past run history.")
 cli.add_typer(history_cli, name="history")
 

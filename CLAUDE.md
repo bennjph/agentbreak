@@ -15,9 +15,15 @@ agentbreak serve
 
 For MCP: `agentbreak inspect` then `serve`.
 
-## Plugin
+## Skill
 
-Install in Claude Code via `/plugin marketplace add mnvsk97/agentbreak`, then use `/agentbreak`.
+Install the portable skill with:
+
+```bash
+npx skills add mnvsk97/agentbreak --skill agent-resilience-testing --yes
+```
+
+Then ask: `Test my agent for resilience.`
 
 ## Verification
 

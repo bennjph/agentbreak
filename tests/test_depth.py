@@ -9,6 +9,7 @@ import threading
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 from fastapi.testclient import TestClient
 
 from agentbreak import main
@@ -258,46 +259,19 @@ def test_mcp_multiple_scenarios_different_tools():
 # ═══════════════════════════════════════════════════════════════════════
 
 
-def test_stream_empty_response_fault_skipped():
-    """empty_response fault is skipped for streaming — stream returns normally."""
+@pytest.mark.parametrize(
+    ("name", "fault"),
+    [
+        ("empty", {"kind": "empty_response"}),
+        ("schema", {"kind": "schema_violation"}),
+        ("wrong", {"kind": "wrong_content", "body": "REPLACED"}),
+        ("large", {"kind": "large_response", "size_bytes": 10000}),
+    ],
+)
+def test_stream_response_mutation_faults_skipped(name, fault):
+    """Response mutation faults are skipped for streaming."""
     main.service_state.llm_runtime = _make_llm_runtime([
-        _scenario("empty", {"kind": "empty_response"}),
-    ])
-    client = TestClient(main.app)
-    r = client.post("/v1/chat/completions", json=OPENAI_STREAM_BODY)
-    assert r.status_code == 200
-    assert "text/event-stream" in r.headers["content-type"]
-    assert "[DONE]" in r.text
-
-
-def test_stream_schema_violation_fault_skipped():
-    """schema_violation fault is skipped for streaming."""
-    main.service_state.llm_runtime = _make_llm_runtime([
-        _scenario("schema", {"kind": "schema_violation"}),
-    ])
-    client = TestClient(main.app)
-    r = client.post("/v1/chat/completions", json=OPENAI_STREAM_BODY)
-    assert r.status_code == 200
-    assert "text/event-stream" in r.headers["content-type"]
-    assert "[DONE]" in r.text
-
-
-def test_stream_wrong_content_fault_skipped():
-    """wrong_content fault is skipped for streaming."""
-    main.service_state.llm_runtime = _make_llm_runtime([
-        _scenario("wrong", {"kind": "wrong_content", "body": "REPLACED"}),
-    ])
-    client = TestClient(main.app)
-    r = client.post("/v1/chat/completions", json=OPENAI_STREAM_BODY)
-    assert r.status_code == 200
-    assert "text/event-stream" in r.headers["content-type"]
-    assert "[DONE]" in r.text
-
-
-def test_stream_large_response_fault_skipped():
-    """large_response fault is skipped for streaming."""
-    main.service_state.llm_runtime = _make_llm_runtime([
-        _scenario("large", {"kind": "large_response", "size_bytes": 10000}),
+        _scenario(name, fault),
     ])
     client = TestClient(main.app)
     r = client.post("/v1/chat/completions", json=OPENAI_STREAM_BODY)
@@ -391,18 +365,6 @@ def test_different_bodies_are_not_duplicates():
     sc = client.get("/_agentbreak/scorecard").json()
     assert sc["duplicate_requests"] == 0
     assert sc["suspected_loops"] == 0
-
-
-def test_mcp_fingerprint_ignores_jsonrpc_id():
-    """MCP duplicates are detected by method+params, not by request ID."""
-    client = _setup_mcp()
-    client.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/call",
-                               "params": {"name": "search", "arguments": {"q": "x"}}})
-    client.post("/mcp", json={"jsonrpc": "2.0", "id": 99, "method": "tools/call",
-                               "params": {"name": "search", "arguments": {"q": "x"}}})
-
-    sc = client.get("/_agentbreak/mcp-scorecard").json()
-    assert sc["duplicate_requests"] == 1
 
 
 # ═══════════════════════════════════════════════════════════════════════

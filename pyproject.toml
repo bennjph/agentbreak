@@ -35,18 +35,14 @@ dependencies = [
 Homepage = "https://github.com/mnvsk97/agentbreak"
 Repository = "https://github.com/mnvsk97/agentbreak"
 Issues = "https://github.com/mnvsk97/agentbreak/issues"
-Documentation = "https://mnvsk97.github.io/agentbreak"
+Documentation = "https://github.com/mnvsk97/agentbreak#readme"
 
 [project.scripts]
 agentbreak = "agentbreak.main:cli"
 
 [project.optional-dependencies]
-plugin = [
-  "mcp>=1.0.0",
-]
 dev = [
   "pytest>=8.0.0",
-  "pytest-xdist>=3.6.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -54,4 +50,3 @@ include = ["agentbreak*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["integration: integration tests that start real servers"]

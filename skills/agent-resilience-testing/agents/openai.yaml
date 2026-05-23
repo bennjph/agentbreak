@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Resilience Testing"
+  short_description: "Chaos-test LLM agents with AgentBreak"
+  default_prompt: "Use $agent-resilience-testing to test my agent for resilience and produce a report."
+policy:
+  allow_implicit_invocation: true

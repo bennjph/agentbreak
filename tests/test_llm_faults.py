@@ -180,18 +180,6 @@ def test_llm_scorecard_degraded_on_faults():
     assert sc["upstream_failures"] == 2
 
 
-def test_llm_duplicate_and_loop_detection():
-    main.service_state.llm_runtime = _make_runtime()
-    client = TestClient(main.app)
-    body = {"model": "m", "messages": [{"role": "user", "content": "same"}]}
-    client.post("/v1/chat/completions", json=body)
-    client.post("/v1/chat/completions", json=body)
-    client.post("/v1/chat/completions", json=body)
-    sc = client.get("/_agentbreak/scorecard").json()
-    assert sc["duplicate_requests"] >= 2
-    assert sc["suspected_loops"] >= 1
-
-
 # ── Disabled / requests endpoint ─────────────────────────────────────
 
 

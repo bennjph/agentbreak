@@ -36,6 +36,33 @@ curl localhost:5005/_agentbreak/scorecard
 
 That's it. No code changes needed — just swap the base URL.
 
+## Skill-led workflow
+
+AgentBreak is designed to be run by agents as well as humans. The Python package is the engine; the portable `agent-resilience-testing` skill is the workflow layer that lets a user ask:
+
+> Test my agent for resilience.
+
+The skill guides an agent through codebase analysis, mock/proxy mode selection, scenario generation, MCP inspection, static skill-risk checks, guardrail probes, test execution, and a resilience report.
+
+The orchestrator always covers four lanes:
+
+- **LLM failures** — outages, brownouts, rate limits, context limits, malformed outputs, streaming failures, and prompt injection
+- **Agent skill supply chain** — malicious or over-broad skills, unsafe downloads, secret access, exfiltration, and dangerous commands
+- **Guardrails** — input/output checks, tool-argument validation, tool-result sanitization, PII/secrets redaction, and approval gates
+- **MCP servers/tools** — transport failures, bad schemas, bad results, registry drift, rug pulls, poisoning, and cross-tool attacks
+
+Install the skill directly with a skills-compatible agent:
+
+```bash
+npx skills add mnvsk97/agentbreak --skill agent-resilience-testing --yes
+```
+
+Then open a skills-compatible agent in your project and say:
+
+```text
+Test my agent for resilience.
+```
+
 ## How it works
 
 AgentBreak reads two files from `.agentbreak/`:
@@ -99,45 +126,6 @@ agentbreak serve --label "added retry logic"
 agentbreak history compare 1 2    # diff two runs
 ```
 
-## Claude Code
-
-AgentBreak works as a plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code):
-
-```bash
-pip install agentbreak
-```
-
-Then in Claude Code:
-
-```
-/plugin marketplace add mnvsk97/agentbreak
-/plugin install agentbreak@mnvsk97-agentbreak
-/reload-plugins
-```
-
-Three commands:
-
-| Command | What it does |
-|---------|-------------|
-| `/agentbreak:init` | Analyze codebase, configure mock/proxy mode |
-| `/agentbreak:create-tests` | Generate project-specific chaos scenarios |
-| `/agentbreak:run-tests` | Run tests, produce resilience report with fixes |
-
-**Update to latest:**
-
-```
-/plugin marketplace add mnvsk97/agentbreak
-/plugin install agentbreak@mnvsk97-agentbreak
-/reload-plugins
-```
-
-**Uninstall:**
-
-```
-/plugin uninstall agentbreak@mnvsk97-agentbreak
-/reload-plugins
-```
-
 ## What it actually measures
 
 AgentBreak doesn't score you on whether faults happen — it injected those on purpose. It scores **what your agent does after the fault** — both reliability failures (retries, error handling) and security failures (following poisoned instructions, leaking data).
@@ -188,9 +176,45 @@ For proxy mode (real API traffic), set `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` a
 
 Commit your `.agentbreak/application.yaml` and `.agentbreak/scenarios.yaml` to the repo so CI uses the same config.
 
-## Full reference
+## Reference
 
-For the full list of fault kinds, schedule modes, match filters, and config options, see the [documentation](https://mnvsk97.github.io/agentbreak).
+### Common commands
+
+```bash
+agentbreak init                         # create .agentbreak/
+agentbreak validate                     # validate application.yaml and scenarios.yaml
+agentbreak validate --test-connection   # also check upstream auth/connectivity
+agentbreak inspect                      # discover MCP tools, resources, and prompts
+agentbreak serve                        # start the proxy
+agentbreak history list                 # show saved runs when history is enabled
+agentbreak history compare 1 2          # compare two saved runs
+```
+
+### Scenario fields
+
+| Field | Purpose |
+|-------|---------|
+| `target` | `llm_chat` or `mcp_tool` |
+| `fault.kind` | Fault to inject |
+| `schedule.mode` | `always`, `random`, or `periodic` |
+| `match.model` | Scope an LLM fault to one model |
+| `match.tool_name` | Scope an MCP fault to one tool |
+| `match.tool_name_pattern` | Scope MCP faults with a wildcard, like `search_*` |
+
+### Built-in fault kinds
+
+| Fault | What it does |
+|-------|--------------|
+| `http_error` | Returns an HTTP error |
+| `latency` | Adds delay |
+| `timeout` | Delays then returns 504 for MCP |
+| `empty_response` | Returns an empty body |
+| `invalid_json` | Returns malformed JSON |
+| `schema_violation` | Corrupts response shape |
+| `wrong_content` | Replaces content |
+| `large_response` | Returns oversized output |
+| `tool_poisoning` | Injects adversarial content into MCP tool results |
+| `rug_pull` | Mutates tool definitions after N requests |
 
 ## Roadmap
 

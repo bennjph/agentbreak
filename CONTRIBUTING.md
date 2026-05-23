@@ -70,4 +70,4 @@ For complex faults that need custom logic, add a `handler.py` with `phase: custo
 - Preserve test isolation so `agentbreak verify` stays deterministic.
 - Update docs when config shape or fault types change.
 
-Full docs at [mnvsk97.github.io/agentbreak](https://mnvsk97.github.io/agentbreak).
+Project docs live in the GitHub README.
