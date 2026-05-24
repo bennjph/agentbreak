@@ -1,16 +1,33 @@
 # AgentBreak
 
-Your agent works great — until the LLM times out, returns garbage, or an MCP tool fails. AgentBreak lets you test for that *before* production.
+AgentBreak lets coding agents test LLM apps for resilience through plain English.
 
-It's a chaos proxy that sits between your agent and the real API, injecting faults like latency spikes, HTTP errors, and malformed responses so you can see how your agent actually handles failure.
+## Install
 
-```
-Agent  -->  AgentBreak (localhost:5005)  -->  Real LLM / MCP server
-                     ^
-          injects faults based on your scenarios
+```bash
+npx skills add mnvsk97/agentbreak --skill agent-resilience-testing --yes
 ```
 
-## Get started
+Then open your coding agent in the project you want to test and say:
+
+```text
+Test my agent for resilience.
+```
+
+The skill analyzes the repo, checks or installs the AgentBreak CLI, configures mock or proxy mode, generates scenarios, runs resilience checks, and returns a report with findings and fixes.
+
+## What It Tests
+
+The skill always covers four lanes:
+
+- **LLM failures** — outages, brownouts, rate limits, context limits, malformed outputs, streaming failures, and prompt injection
+- **Agent skill supply chain** — malicious or over-broad skills, unsafe downloads, secret access, exfiltration, and dangerous commands
+- **Guardrails** — input/output checks, tool-argument validation, tool-result sanitization, PII/secrets redaction, and approval gates
+- **MCP servers/tools** — transport failures, bad schemas, bad results, registry drift, rug pulls, poisoning, and cross-tool attacks
+
+## CLI Engine
+
+The skill uses the Python CLI as the reliable engine for proxying, fault injection, MCP inspection, scorecards, and history. You can also run the CLI directly:
 
 ```bash
 pip install agentbreak
@@ -35,33 +52,6 @@ curl localhost:5005/_agentbreak/scorecard
 ```
 
 That's it. No code changes needed — just swap the base URL.
-
-## Skill-led workflow
-
-AgentBreak is designed to be run by agents as well as humans. The Python package is the engine; the portable `agent-resilience-testing` skill is the workflow layer that lets a user ask:
-
-> Test my agent for resilience.
-
-The skill guides an agent through codebase analysis, mock/proxy mode selection, scenario generation, MCP inspection, static skill-risk checks, guardrail probes, test execution, and a resilience report.
-
-The orchestrator always covers four lanes:
-
-- **LLM failures** — outages, brownouts, rate limits, context limits, malformed outputs, streaming failures, and prompt injection
-- **Agent skill supply chain** — malicious or over-broad skills, unsafe downloads, secret access, exfiltration, and dangerous commands
-- **Guardrails** — input/output checks, tool-argument validation, tool-result sanitization, PII/secrets redaction, and approval gates
-- **MCP servers/tools** — transport failures, bad schemas, bad results, registry drift, rug pulls, poisoning, and cross-tool attacks
-
-Install the skill directly with a skills-compatible agent:
-
-```bash
-npx skills add mnvsk97/agentbreak --skill agent-resilience-testing --yes
-```
-
-Then open a skills-compatible agent in your project and say:
-
-```text
-Test my agent for resilience.
-```
 
 ## How it works
 
