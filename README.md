@@ -228,3 +228,12 @@ agentbreak history compare 1 2          # compare two saved runs
 - **Skill-based attacks** — target agent skills/capabilities with adversarial tool sequences
 - ~~**Deprecated library injection** — return responses referencing deprecated or vulnerable libraries~~ Done (`deprecated_library`)
 - ~~**Model deprecation simulation** — simulate model sunset responses and version migration failures~~ Done (`model_deprecated`)
+
+## Maintainers
+
+AgentBreak is maintained by:
+
+- [@mnvsk97](https://github.com/mnvsk97) — creator
+- [@bennjph](https://github.com/bennjph) — maintainer
+
+Reviews on pull requests are routed via [`.github/CODEOWNERS`](.github/CODEOWNERS). See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
